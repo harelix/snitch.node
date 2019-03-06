@@ -1,6 +1,6 @@
 {
   "name": "snitch.relix",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "kafka producer",
   "main": "index.js",
   "scripts": {

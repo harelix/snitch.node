@@ -122,17 +122,9 @@ module.exports = {
     Snitch
 }
 
-/**
- * 
- * 
- *  Example on how to use Snitch
-    Snitch.init({
-        useHTTP : false, //defaults to kafka 
-        kafkaTopic: 'snitch', //default
-        consulAddress : '10.1.40.204' //must set this value
-    })
-**/
 
+
+/*
 Snitch.init({
     useHTTP : false, //defaults to kafka 
     config : snitchConfig //consulAddress : when valerian will go online in 2025, 
@@ -156,3 +148,4 @@ demoDispatcher = () => {
         demoDispatcher()    
     }, 1000)
 }
+*/
