@@ -118,13 +118,9 @@ const heartbeat = async (args) => {
 
 
 
-module.exports = {
-    Snitch
-}
+module.exports = Snitch
 
 
-
-/*
 Snitch.init({
     useHTTP : false, //defaults to kafka 
     config : snitchConfig //consulAddress : when valerian will go online in 2025, 
@@ -148,4 +144,3 @@ demoDispatcher = () => {
         demoDispatcher()    
     }, 1000)
 }
-*/
