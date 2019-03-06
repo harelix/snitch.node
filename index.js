@@ -29,13 +29,9 @@ const Snitch = (() => {
     produceMessageToKafkaTopic = (topic, message) => {
 
         payloads = [{ topic , messages: message}];
-        producer.on('ready', function () {
-            available = true
-            producer.send(payloads, function (err, data) {
-                console.log(data);
-            });
+        producer.send(payloads, function (err, data) {
+            console.log(data);
         });
-        producer.on('error', function (err) {})
     }
 
     return {
@@ -61,6 +57,13 @@ const Snitch = (() => {
                 kafkaHost : config.kafka.address
             }),
             producer = new Producer(client);
+            producer.on('ready', () => {
+                available = true
+            });
+
+            producer.on('error', (err) => {
+                console.error(err)
+            });
         },
         error: (arguments) => {
             let { origin, dispatcher, context, event, message, executor, target, correlationId } = arguments

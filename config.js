@@ -2,11 +2,11 @@
 
 module.exports = {
     consul : {
-        "address" : "10.1.40.190:9092",
+        "address" : "10.1.40.190:8500",
         "port" : 8500
     },
     kafka : {
-        address : "vienna-bi-srv01",
+        address : "vienna-bi-srv01.managix.local:9092",
         topics : {
             error : "snitch_error",
             default : "xvulcanx"
