@@ -1,13 +1,13 @@
 {
-  "name": "snitch",
+  "name": "snitch.relix",
   "version": "1.0.0",
-  "description": "",
+  "description": "kafka producer",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Relix",
-  "license": "ISC",
+  "author": "Relix<harel.fb@gmail.com>",
+  "license": "Apache-2.0",
   "dependencies": {
     "consul": "^0.34.1",
     "kafka-node": "^4.0.0"

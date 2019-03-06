@@ -1,8 +1,12 @@
+var snitchConfig = require('./config');
 
+/*
 var consul = require('consul')({
-    host: "10.1.40.204",
-    port: 8500
+    host: config.consul.address,
+    port: config.consul.port
 });
+*/
+
 
 var kafka = require('kafka-node')
     Producer = kafka.Producer
@@ -22,9 +26,9 @@ const Snitch = (() => {
     let available = false;
     let client, producer;
 
-    produceMessageToKafkaTopic = (message) => {
+    produceMessageToKafkaTopic = (topic, message) => {
 
-        payloads = [{ topic: config.snitchkafkaTopic, messages: message}];
+        payloads = [{ topic , messages: message}];
         producer.on('ready', function () {
             available = true
             producer.send(payloads, function (err, data) {
@@ -35,7 +39,9 @@ const Snitch = (() => {
     }
 
     return {
-        init: () => {
+        init: (args) => {
+            let { useHTTP, config } = args
+            /*
             consul.kv.get('snitch/development/clients/core/config', function (err, result) {
                 if (err) throw err;
                 try{
@@ -49,25 +55,31 @@ const Snitch = (() => {
                     throw exception
                 }
             });
+            */
+
+           client = new kafka.KafkaClient({
+                kafkaHost : config.kafka.address
+            }),
+            producer = new Producer(client);
         },
-        error: () => {
-            let { source, application, action, message, correlation, event } = arguments
+        error: (arguments) => {
+            let { origin, dispatcher, context, event, message, executor, target, correlationId } = arguments
             try {
-                produceMessageToKafkaTopic({
+                produceMessageToKafkaTopic(snitchConfig.kafka.topics.error,{
                     metadata : {
-                        correlationID : correlation || uuidv4(),
-	                    type : 'SNITCH'
-                    }, 
-                    source, 
-                    application, 
-                    action, 
-                    type : 'error',
-                    message, 
-                    event })    
+                        origin,
+                        dispatcher,
+                        context,
+                        event,
+                        type : snitchConfig.messages.SnitchMessage,
+                        executor,
+                        target,
+                        correlationId : correlationId || uuidv4(),
+                    },
+                    message})    
             } catch (err) {
                 console.log(err.stack)
             }
-            
         },
         info: () => {
             info(arguments)
@@ -120,22 +132,24 @@ module.exports = {
 
 Snitch.init({
     useHTTP : false, //defaults to kafka 
-    kafkaTopic: 'snitch', //default
-    consulAddress : '10.1.40.204' //must set this value
+    config : snitchConfig //consulAddress : when valerian will go online in 2025, 
 })
 
 setTimeout(() => {
-    Snitch.error({
-        source : 'Valerian', 
-        application : 'Test Snitch', 
-        action : 'Action', 
-        message : 'Message', 
-        correlation : 'correlation', 
-        event : 'event'
-    })
+    demoDispatcher()    
 }, 5000)
 
 
-
-  
-  
+demoDispatcher = () => {
+    Snitch.error({
+        origin : 'Valerian', 
+        context : 'Snitch node Test', 
+        dispatcher : 'Self-Snitch', 
+        event : 'Test',
+        executor : "self timeout",
+        message : "error test message from snitch"
+    })
+    setTimeout(() => {
+        demoDispatcher()    
+    }, 1000)
+}
