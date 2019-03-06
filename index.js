@@ -22,7 +22,7 @@ function uuidv4() {
 
 const Snitch = (() => {
 
-    let config;
+    let _config;
     let available = false;
     let client, producer;
 
@@ -35,6 +35,9 @@ const Snitch = (() => {
     }
 
     return {
+        getConfig : () => {
+            return _config
+        },
         init: (args) => {
             let { useHTTP, config } = args
             /*
@@ -52,6 +55,7 @@ const Snitch = (() => {
                 }
             });
             */
+           _config = config;
 
            client = new kafka.KafkaClient({
                 kafkaHost : config.kafka.address
