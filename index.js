@@ -41,6 +41,7 @@ const Snitch = (() => {
     }
 
     return {
+        MessageStateTypes : SnitchMessageState,
         getConfig : () => {
             return _config
         },
