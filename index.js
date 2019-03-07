@@ -33,8 +33,16 @@ const Snitch = (() => {
     let client, producer;
 
     produceMessageToKafkaTopic = (topic, message) => {
-
-        payloads = [{ topic , messages: message}];
+        
+        if(typeof message === "object"){
+            try{
+                message = JSON.stringify(message)
+            }
+            catch(e){
+                console.error(e);
+            }
+        }
+        payloads = [{ topic , messages: [message]}];
         producer.send(payloads, function (err, data) {
             console.log(data);
         });
@@ -198,12 +206,13 @@ setTimeout(() => {
 
 
 demoDispatcher = () => {
-    Snitch.error({
+    Snitch.dispatch({
         origin : 'Valerian', 
-        context : 'Snitch node Test', 
         dispatcher : 'Self-Snitch', 
+        context : 'Snitch node Test', 
         event : 'Test',
         executor : "self timeout",
+        state : SnitchMessageState.Completed,
         message : "error test message from snitch"
     })
     setTimeout(() => {
