@@ -84,8 +84,47 @@ const Snitch = (() => {
                 console.error(err)
             });
         },
+        __dispatchMessageWithoutMetadata__: () => {
+            produceMessageToKafkaTopic(snitchConfig.kafka.topics.default, 
+                {
+                  "message": {
+                    "step": {
+                      "_id": "1",
+                      "Name": "Approve Activity",
+                      "BuildingBlockArtifactId": "5b8d2180bc655759bd75f5d1"
+                    }
+                }
+            })
+        },
+        __dispatchMessageWithMetadataAndUnknownType__: () => {
+            produceMessageToKafkaTopic(snitchConfig.kafka.topics.default, 
+                {
+                    "metadata": {
+                    "origin": "ActionItems",
+                    "dispatcher": "ActionItems",
+                    "state": "completed",
+                    "context": "Snitch node Test",
+                    "event": "Test",
+                    "type": "SomethingDifferent",
+                    "executor": "ActionItems",
+                    "target": "ActionItems",
+                    "correlationId": "de05edef-a766-48d5-a7ac-b71705722789"
+                  },
+                  "message": {
+                    "step": {
+                      "_id": "1",
+                      "Name": "Approve Activity",
+                      "BuildingBlockArtifactId": "5b8d2180bc655759bd75f5d1"
+                    }
+                }
+            })
+        },
         error: (arguments) => {
             let { origin, dispatcher, context, event, message, executor, target, correlationId } = arguments
+
+            if(typeof message==="string"){
+                return 
+            }
             try {
                 produceMessageToKafkaTopic(snitchConfig.kafka.topics.error,{
                     metadata : {
@@ -99,13 +138,16 @@ const Snitch = (() => {
                         target,
                         correlationId : correlationId || uuidv4(),
                     },
-                    message})    
+                    ...message})    
             } catch (err) {
                 console.log(err.stack)
             }
         },
         dispatch: (arguments) => {
             let { origin, dispatcher, context, event, message, executor, target, state, correlationId } = arguments
+            if(typeof message==="string"){
+                return 
+            }
             try {
                 produceMessageToKafkaTopic(snitchConfig.kafka.topics.default,{
                     metadata : {
@@ -119,13 +161,18 @@ const Snitch = (() => {
                         target,
                         correlationId : correlationId || uuidv4(),
                     },
-                    message})    
+                    ...message})    
             } catch (err) {
                 console.log(err.stack)
             }
         },
         info: (arguments) => {
             let { origin, dispatcher, context, event, message, executor, target, state, correlationId } = arguments
+
+            if(typeof message==="string"){
+                return 
+            }
+
             try {
                 produceMessageToKafkaTopic(snitchConfig.kafka.topics.error,{
                     metadata : {
@@ -139,13 +186,16 @@ const Snitch = (() => {
                         target,
                         correlationId : correlationId || uuidv4(),
                     },
-                    message})    
+                    ...message})    
             } catch (err) {
                 console.log(err.stack)
             }
         },
         heartbeat: (arguments) => {
             let { origin, dispatcher, context, event, message, executor, target, state, correlationId } = arguments
+            if(typeof message==="string"){
+                return 
+            }
             try {
                 produceMessageToKafkaTopic(snitchConfig.kafka.topics.error,{
                     metadata : {
@@ -159,7 +209,7 @@ const Snitch = (() => {
                         target,
                         correlationId : correlationId || uuidv4(),
                     },
-                    message})    
+                    ...message})    
             } catch (err) {
                 console.log(err.stack)
             }
@@ -194,7 +244,6 @@ const heartbeat = async (args) => {
 
 module.exports = Snitch
 
-
 /*
     Snitch.init({
         useHTTP : false, //defaults to kafka 
@@ -207,6 +256,8 @@ module.exports = Snitch
 
 
     demoDispatcher = () => {
+        //Snitch.__dispatchMessageWithoutMetadata__()
+      
         Snitch.dispatch({
             origin : 'XValerian', 
             dispatcher : 'Self-Snitch', 
@@ -214,10 +265,12 @@ module.exports = Snitch
             event : 'Test',
             executor : "self timeout",
             state : SnitchMessageState.Completed,
-            message : "error test message from snitch"
+            message : "username"
         })
+      
         setTimeout(() => {
             demoDispatcher()    
         }, 1000)
     }
-*/
+
+    */
