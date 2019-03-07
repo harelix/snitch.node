@@ -19,6 +19,12 @@ function uuidv4() {
     });
 }
 
+const SnitchMessageState = {
+    Received : "Received",
+    InvalidMessage : "InvalidMessage",
+    Completed : "Completed",
+    Error : "Error"
+}
 
 const Snitch = (() => {
 
