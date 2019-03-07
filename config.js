@@ -13,7 +13,7 @@ module.exports = {
         }
     },
     messages : {
-        RogueMessage : "RogueMessage",
-        SnitchMessage : "SnitchMessage"
+        RogueMessage : "Rogue",
+        SnitchMessage : "Snitch"
     }
 }
