@@ -76,6 +76,7 @@ const Snitch = (() => {
                     metadata : {
                         origin,
                         dispatcher,
+                        state : "Error",
                         context,
                         event,
                         type : snitchConfig.messages.SnitchMessage,
@@ -88,11 +89,65 @@ const Snitch = (() => {
                 console.log(err.stack)
             }
         },
-        info: () => {
-            info(arguments)
+        dispatch: (arguments) => {
+            let { origin, dispatcher, context, event, message, executor, target, state, correlationId } = arguments
+            try {
+                produceMessageToKafkaTopic(snitchConfig.kafka.topics.default,{
+                    metadata : {
+                        origin,
+                        dispatcher,
+                        state,
+                        context,
+                        event,
+                        type : snitchConfig.messages.SnitchMessage,
+                        executor,
+                        target,
+                        correlationId : correlationId || uuidv4(),
+                    },
+                    message})    
+            } catch (err) {
+                console.log(err.stack)
+            }
         },
-        heartbeat: () => {
-            info(arguments)
+        info: (arguments) => {
+            let { origin, dispatcher, context, event, message, executor, target, state, correlationId } = arguments
+            try {
+                produceMessageToKafkaTopic(snitchConfig.kafka.topics.error,{
+                    metadata : {
+                        origin,
+                        dispatcher,
+                        state,
+                        context,
+                        event,
+                        type : snitchConfig.messages.SnitchMessage,
+                        executor,
+                        target,
+                        correlationId : correlationId || uuidv4(),
+                    },
+                    message})    
+            } catch (err) {
+                console.log(err.stack)
+            }
+        },
+        heartbeat: (arguments) => {
+            let { origin, dispatcher, context, event, message, executor, target, state, correlationId } = arguments
+            try {
+                produceMessageToKafkaTopic(snitchConfig.kafka.topics.error,{
+                    metadata : {
+                        origin,
+                        dispatcher,
+                        state,
+                        context,
+                        event,
+                        type : snitchConfig.messages.SnitchMessage,
+                        executor,
+                        target,
+                        correlationId : correlationId || uuidv4(),
+                    },
+                    message})    
+            } catch (err) {
+                console.log(err.stack)
+            }
         }
     }
 })()

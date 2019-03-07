@@ -9,7 +9,7 @@ module.exports = {
         address : "vienna-bi-srv01.managix.local:9092",
         topics : {
             error : "snitch_error",
-            default : "xvulcanx"
+            default : "snitch_messages"
         }
     },
     messages : {

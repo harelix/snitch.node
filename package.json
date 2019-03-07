@@ -1,7 +1,7 @@
 {
   "name": "snitch.relix",
-  "version": "1.0.4",
-  "description": "kafka producer",
+  "version": "1.0.6",
+  "description": "Snitch Kafka producer and HTTP request dispatcher",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
