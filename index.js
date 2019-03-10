@@ -12,13 +12,6 @@ var kafka = require('kafka-node')
     Producer = kafka.Producer
     
 
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
 const SnitchMessageState = {
     Received : "Received",
     InvalidMessage : "InvalidMessage",
@@ -119,6 +112,9 @@ const Snitch = (() => {
                 }
             })
         },
+        getUUID : () => {
+            return uuidv4();
+        },
         error: (arguments) => {
             let { origin, dispatcher, context, event, message, executor, target, correlationId } = arguments
 
@@ -217,6 +213,15 @@ const Snitch = (() => {
     }
 })()
 
+
+const uuidv4 = function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+
 const info = async (args) => {
 
   
@@ -250,13 +255,14 @@ module.exports = Snitch
         config : snitchConfig //consulAddress : when valerian will go online in 2025, 
     })
 
+    console.log(Snitch.getUUID());
+
     setTimeout(() => {
         demoDispatcher()    
-    }, 5000)
+    }, 1000)
 
 
     demoDispatcher = () => {
-        //Snitch.__dispatchMessageWithoutMetadata__()
       
         Snitch.dispatch({
             origin : 'XValerian', 
@@ -265,7 +271,7 @@ module.exports = Snitch
             event : 'Test',
             executor : "self timeout",
             state : SnitchMessageState.Completed,
-            message : "username"
+            message : { "username" : "Relix" }
         })
       
         setTimeout(() => {
