@@ -248,8 +248,8 @@ const heartbeat = async (args) => {
 
 
 module.exports = Snitch
-
 /*
+
     Snitch.init({
         useHTTP : false, //defaults to kafka 
         config : snitchConfig //consulAddress : when valerian will go online in 2025, 
@@ -264,11 +264,14 @@ module.exports = Snitch
 
     demoDispatcher = () => {
       
+        Snitch.dispatch({message : { "username" : "Relix" }})
+
         Snitch.dispatch({
-            origin : 'XValerian', 
-            dispatcher : 'Self-Snitch', 
+            origin : 'Demo', 
+            dispatcher : 'Snitch Demo', 
             context : 'Snitch node Test', 
             event : 'Test',
+            type : 'Demo',
             executor : "self timeout",
             state : SnitchMessageState.Completed,
             message : { "username" : "Relix" }
@@ -276,7 +279,7 @@ module.exports = Snitch
       
         setTimeout(() => {
             demoDispatcher()    
-        }, 1000)
+        }, 10000000)
     }
 
     */
