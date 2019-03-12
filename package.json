@@ -1,6 +1,6 @@
 {
   "name": "snitch.relix",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "description": "Snitch Kafka producer and HTTP request dispatcher",
   "main": "index.js",
   "scripts": {

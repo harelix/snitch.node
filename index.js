@@ -140,7 +140,7 @@ const Snitch = (() => {
             }
         },
         dispatch: (arguments) => {
-            let { origin, dispatcher, context, event, message, executor, target, state, correlationId } = arguments
+            let { origin, dispatcher, context, event, type, message, executor, target, state, correlationId } = arguments
             if(typeof message==="string"){
                 return 
             }
@@ -152,7 +152,7 @@ const Snitch = (() => {
                         state,
                         context,
                         event,
-                        type : snitchConfig.messages.SnitchMessage,
+                        type,
                         executor,
                         target,
                         correlationId : correlationId || uuidv4(),
