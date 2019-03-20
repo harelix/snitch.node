@@ -37,7 +37,7 @@ const Snitch = (() => {
         }
         payloads = [{ topic , messages: [message]}];
         producer.send(payloads, function (err, data) {
-            console.log(data);
+            //console.log(data);
         });
     }
 
